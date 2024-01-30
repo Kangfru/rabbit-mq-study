@@ -8,10 +8,12 @@ import java.util.concurrent.TimeUnit;
 
 @Component
 public class Runner implements CommandLineRunner {
-
     private final RabbitTemplate rabbitTemplate;
-
     private final Receiver receiver;
+
+    private static final String ROUTING_KEY = "foo.bar.baz";
+    private static final String MESSAGE_CONTENT = "Hello from the other side.";
+    private static final long AWAIT_DURATION = 10000L;
 
     public Runner(Receiver receiver, RabbitTemplate rabbitTemplate) {
         this.receiver = receiver;
@@ -19,9 +21,17 @@ public class Runner implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) throws InterruptedException {
+        sendMessage();
+        awaitResponse();
+    }
+
+    private void sendMessage() {
         System.out.println("Sending message...");
-        rabbitTemplate.convertAndSend(MessagingRabbitmqApplication.topicExchangeName, "foo.bar.baz", "Hello from the other side." );
-        receiver.getLatch().await(10000, TimeUnit.MILLISECONDS);
+        rabbitTemplate.convertAndSend(MessagingRabbitmqApplication.topicExchangeName, ROUTING_KEY, MESSAGE_CONTENT);
+    }
+
+    private void awaitResponse() throws InterruptedException {
+        receiver.getLatch().await(AWAIT_DURATION, TimeUnit.MILLISECONDS);
     }
 }
