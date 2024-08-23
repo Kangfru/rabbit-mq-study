@@ -1,9 +1,6 @@
 package com.kangfru.sample.config;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -29,11 +26,6 @@ public class RabbitmqConfig {
     private int port;
 
     @Bean
-    DirectExchange directExchange() {
-        return new DirectExchange("hello.exchange");
-    }
-
-    @Bean
     Queue queue() {
         return new Queue("hello.queue", false);
     }
@@ -41,6 +33,97 @@ public class RabbitmqConfig {
     @Bean
     Binding binding(DirectExchange directExchange, Queue queue) {
         return BindingBuilder.bind(queue).to(directExchange).with("hello.key");
+    }
+
+    /**
+     * Direct Exchange Binding
+     * @return
+     */
+    @Bean
+    DirectExchange directExchange() {
+        return new DirectExchange("exchange.direct");
+    }
+
+    @Bean
+    Queue queue1() {
+        return new Queue("queue1", false);
+    }
+
+    @Bean
+    Binding directBinding() {
+        return BindingBuilder.bind(queue1()).to(directExchange()).with("order.pizza");
+    }
+
+    /**
+     * Fanout Exchange 수행
+     */
+    @Bean
+    FanoutExchange fanoutExchange() {
+        return new FanoutExchange("exchange.fanout");
+    }
+
+    @Bean
+    Queue queue2() {
+        return new Queue("queue2", false);
+    }
+
+    @Bean
+    Queue queue3() {
+        return new Queue("queue3", false);
+    }
+
+    @Bean
+    Binding fanoutBinding1(FanoutExchange fanoutExchange, Queue queue2) {
+        return BindingBuilder.bind(queue2).to(fanoutExchange);
+    }
+
+    @Bean
+    Binding fanoutBinding2(FanoutExchange fanoutExchange, Queue queue3) {
+        return BindingBuilder.bind(queue3).to(fanoutExchange);
+    }
+
+    /**
+     * Header Exchange
+     */
+    @Bean
+    HeadersExchange headersExchange() {
+        return new HeadersExchange("exchange.headers");
+    }
+
+    @Bean
+    Queue queue4() {
+        return new Queue("queue4", false);
+    }
+
+    @Bean
+    Binding headersBinding(HeadersExchange headersExchange, Queue queue4) {
+        return BindingBuilder
+                .bind(queue4)
+                .to(headersExchange)
+                .where("x-api-key")     // Header 내에 "x-api-key" 라는 값이 존재하는 경우
+                .exists();
+    }
+
+    /**
+     * Topic Exchange 수행
+     * @return
+     */
+    @Bean
+    TopicExchange topicExchange() {
+        return new TopicExchange("exchange.topic");
+    }
+
+    @Bean
+    Queue queue5() {
+        return new Queue("queue5", false);
+    }
+
+    @Bean
+    Binding topicBinding(TopicExchange topicExchange, Queue queue5) {
+        return BindingBuilder
+                .bind(queue5)
+                .to(topicExchange)
+                .with("order.*");
     }
 
     @Bean

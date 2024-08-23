@@ -6,4 +6,12 @@ public interface ProducerService {
 
     void sendMessage(MessageDto messageDto);
 
+    void directSendMessage(MessageDto messageDto);
+
+    void fanoutSendMessage(MessageDto messageDto);
+
+    void headerSendMessage(MessageDto messageDto);
+
+    void topicSendMessage(MessageDto messageDto);
+
 }

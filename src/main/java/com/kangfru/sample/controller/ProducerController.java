@@ -41,4 +41,51 @@ public class ProducerController {
         return new ResponseEntity<>(ar, HttpStatus.OK);
     }
 
+    @PostMapping("/direct-message")
+    public ResponseEntity<?> sendDirectMessage(@RequestBody MessageDto messageDto) {
+        String result = "";
+
+        producerService.directSendMessage(messageDto);
+
+        ApiResponse ar = ApiResponse.builder()
+                .result(result)
+                .resultCode(SuccessCode.SELECT.getStatus())
+                .resultMessage(SuccessCode.SELECT.getMessage())
+                .build();
+        return new ResponseEntity<>(ar, HttpStatus.OK);
+    }
+
+    @PostMapping("/fanout-message")
+    public ResponseEntity<?> sendFanoutMessage(@RequestBody MessageDto messageDto) {
+        producerService.fanoutSendMessage(messageDto);
+        ApiResponse ar = ApiResponse.builder()
+                .result("")
+                .resultCode(SuccessCode.SELECT.getStatus())
+                .resultMessage(SuccessCode.SELECT.getMessage())
+                .build();
+        return new ResponseEntity<>(ar, HttpStatus.OK);
+    }
+
+    @PostMapping("/header-message")
+    public ResponseEntity<?> sendHeaderMessage(@RequestBody MessageDto messageDto) {
+        producerService.headerSendMessage(messageDto);
+        ApiResponse ar = ApiResponse.builder()
+                .result("")
+                .resultCode(SuccessCode.SELECT.getStatus())
+                .resultMessage(SuccessCode.SELECT.getMessage())
+                .build();
+        return new ResponseEntity<>(ar, HttpStatus.OK);
+    }
+
+    @PostMapping("/topic-message")
+    public ResponseEntity<?> sendTopicMessage(@RequestBody MessageDto messageDto) {
+        producerService.topicSendMessage(messageDto);
+        ApiResponse ar = ApiResponse.builder()
+                .result("")
+                .resultCode(SuccessCode.SELECT.getStatus())
+                .resultMessage(SuccessCode.SELECT.getMessage())
+                .build();
+        return new ResponseEntity<>(ar, HttpStatus.OK);
+    }
+
 }

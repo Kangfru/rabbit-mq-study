@@ -5,3 +5,40 @@ content-type: application/json;UTF-8
   "title": "Rabbitmq Title",
   "message": "Rabbitmq Message"
 }
+
+### direct exchange를 통한 queue 등록
+POST http://localhost:4732/api/v1/producer/direct-message
+content-type: application/json;UTF-8
+
+{
+  "title": "Rabbitmq Direct Exchange",
+  "message": "Rabbitmq Direct message"
+}
+
+### fanout exchange를 통한 queue 등록
+POST http://localhost:4732/api/v1/producer/fanout-message
+content-type: application/json;UTF-8
+
+{
+  "title": "Rabbitmq Fanout Exchange",
+  "message": "Rabbitmq Message"
+}
+
+### header exchange를 통한 queue 등록
+POST http://localhost:4732/api/v1/producer/header-message
+content-type: application/json;UTF-8
+x-api-key: {{$timestamp}}
+
+{
+  "title": "Rabbitmq Header Exchange",
+  "message": "Rabbitmq Message"
+}
+
+### topic exchange를 통한 queue 등록
+POST http://localhost:4732/api/v1/producer/topic-message
+content-type: application/json;UTF-8
+
+{
+  "title": "Rabbitmq Topic Exchange",
+  "message": "Rabbitmq Message"
+}
