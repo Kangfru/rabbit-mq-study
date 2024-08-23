@@ -1,0 +1,7 @@
+POST http://localhost:4732/api/v1/producer/send
+content-type: application/json;UTF-8
+
+{
+  "title": "Rabbitmq Title",
+  "message": "Rabbitmq Message"
+}

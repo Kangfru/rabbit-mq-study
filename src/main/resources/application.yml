@@ -1,3 +1,6 @@
+server:
+  port: 4732
+
 spring:
   rabbitmq:
     host: localhost
